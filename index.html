@@ -227,7 +227,7 @@
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      navigator.serviceWorker.register('/finance-scott/sw.js', {scope: '/finance-scott/'})
         .then(reg => console.log('SW registered:', reg.scope))
         .catch(err => console.log('SW failed:', err));
     });
