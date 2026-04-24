@@ -1,17 +1,16 @@
 // ── Firebase imports ──────────────────────────────────────────
-import { initializeApp }                        from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getDatabase, ref, set, onValue, get }  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+import { initializeApp }                       from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getDatabase, ref, set, onValue }      from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
-// ── Firebase config (edit these with your project values) ─────
-const firebaseConfig = {
-  apiKey: "AIzaSyAVoecH0pZvbh7vZd2rVP_nRYSpc3biTzg",
-  authDomain: "finance-scott-dd37d.firebaseapp.com",
-  databaseURL: "https://finance-scott-dd37d-default-rtdb.firebaseio.com",
-  projectId: "finance-scott-dd37d",
-  storageBucket: "finance-scott-dd37d.firebasestorage.app",
+// ── Firebase config ───────────────────────────────────────────
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyAVoecH0pZvbh7vZd2rVP_nRYSpc3biTzg",
+  authDomain:        "finance-scott-dd37d.firebaseapp.com",
+  databaseURL:       "https://finance-scott-dd37d-default-rtdb.firebaseio.com",
+  projectId:         "finance-scott-dd37d",
+  storageBucket:     "finance-scott-dd37d.firebasestorage.app",
   messagingSenderId: "19984991589",
-  appId: "1:19984991589:web:1e01c778f7278a750f0d8c",
-  measurementId: "G-FN75TMXVRR"
+  appId:             "1:19984991589:web:1e01c778f7278a750f0d8c"
 };
 
 // ── Firebase state ────────────────────────────────────────────
