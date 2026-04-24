@@ -9,25 +9,20 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
 <meta name="apple-mobile-web-app-title" content="Finance"/>
 <meta name="description" content="Personal finance tracker"/>
-
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png"/>
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png"/>
-
 <title>Finance</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<!-- Firebase -->
 <script type="module" src="script.js"></script>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<!-- ── PIN SCREEN ─────────────────────────────────────── -->
+<!-- PIN SCREEN -->
 <div id="pinScreen">
   <div class="pin-wrap">
-    <div class="pin-logo">
-      <img src="icons/icon-192x192.png" alt="Finance" class="pin-icon"/>
-    </div>
+    <img src="icons/icon-192x192.png" alt="Finance" class="pin-icon"/>
     <div class="pin-title" id="pinTitle">Enter PIN</div>
     <div class="pin-dots">
       <span class="pin-dot" id="pd0"></span>
@@ -53,10 +48,9 @@
   </div>
 </div>
 
-<!-- ── APP ────────────────────────────────────────────── -->
+<!-- APP -->
 <div id="appRoot" style="display:none">
 <div class="frame">
-
   <div class="topbar">
     <span class="app-name">Finance</span>
     <nav class="nav">
@@ -100,7 +94,7 @@
           <input class="fi" id="balTarget" type="number" placeholder="Enter new balance (₹)" style="flex:1"/>
           <button class="add-btn" onclick="App.setBalance()">Apply</button>
         </div>
-        <div class="bal-note">Creates an automatic adjustment record (income or expense) to reach the target. Your history stays intact.</div>
+        <div class="bal-note">Creates an automatic adjustment record to reach the target. History stays intact.</div>
       </div>
       <div class="bal-stats">
         <div class="bstat"><div class="bstat-label">Total Income</div><div class="bstat-val g" id="bStatIn">₹0</div></div>
@@ -206,224 +200,6 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/finance-scott/sw.js', {scope: '/finance-scott/'})
-        .catch(err => console.log('SW failed:', err));
-    });
-  }
-</script>
-</body>
-</html>
-</head>
-<body>
-
-<div class="frame">
-
-  <div class="topbar">
-    <span class="app-name">Finance</span>
-    <nav class="nav">
-      <button class="nav-btn" id="btn-dashboard" onclick="App.show('dashboard')">Dashboard</button>
-      <span class="nav-sep">|</span>
-      <button class="nav-btn active" id="btn-records" onclick="App.show('records')">Transactions</button>
-      <span class="nav-sep">|</span>
-      <button class="nav-btn" id="btn-balance" onclick="App.show('balance')">Balance</button>
-      <span class="nav-sep">|</span>
-      <button class="nav-btn" id="btn-nws" onclick="App.show('nws')">Classification</button>
-    </nav>
-  </div>
-
-  <div class="panels">
-
-    <!-- TRANSACTIONS -->
-    <div class="panel active" id="panel-records">
-      <div class="chat-box" id="chatBox">
-        <div class="chat-chips" id="chatChips"></div>
-        <div class="chat-prompt" id="chatPrompt">What's the description?</div>
-        <div id="chatBody">
-          <div class="chat-input-row no-border">
-            <input class="chat-input" id="chatInput" type="text" placeholder="e.g. Salary from TCS" autocomplete="off"/>
-            <span class="chat-hint">press , to continue</span>
-          </div>
-        </div>
-      </div>
-      <div class="rec-list" id="recList"></div>
-    </div>
-
-    <!-- BALANCE -->
-    <div class="panel" id="panel-balance">
-      <div class="bal-center">
-        <div class="bal-label">current balance</div>
-        <div class="bal-big pos" id="balBig">₹0</div>
-        <div class="bal-sub" id="balSub">from 0 transactions</div>
-      </div>
-      <div class="bal-adjust">
-        <div class="bal-adjust-title">Set balance directly</div>
-        <div class="bal-row">
-          <input class="fi" id="balTarget" type="number" placeholder="Enter new balance (₹)" style="flex:1"/>
-          <button class="add-btn" onclick="App.setBalance()">Apply</button>
-        </div>
-        <div class="bal-note">Creates an automatic adjustment record (income or expense) to reach the target. Your history stays intact.</div>
-      </div>
-      <div class="bal-stats">
-        <div class="bstat"><div class="bstat-label">Total Income</div><div class="bstat-val g" id="bStatIn">₹0</div></div>
-        <div class="bstat"><div class="bstat-label">Total Expenses</div><div class="bstat-val r" id="bStatOut">₹0</div></div>
-        <div class="bstat"><div class="bstat-label">Savings Rate</div><div class="bstat-val" id="bStatRate">—</div></div>
-      </div>
-    </div>
-
-    <!-- CLASSIFICATION -->
-    <div class="panel" id="panel-nws">
-      <div class="nws-totals">
-        <div class="nws-total-card needs" onclick="App.toggleDrawer('needs')">
-          <div class="nws-total-label">Needs</div>
-          <div class="nws-total-amt" id="nws-needs-amt">₹0</div>
-          <div class="nws-card-hint">tap to view</div>
-        </div>
-        <div class="nws-total-card wants" onclick="App.toggleDrawer('wants')">
-          <div class="nws-total-label">Wants</div>
-          <div class="nws-total-amt" id="nws-wants-amt">₹0</div>
-          <div class="nws-card-hint">tap to view</div>
-        </div>
-        <div class="nws-total-card saves" onclick="App.toggleDrawer('saves')">
-          <div class="nws-total-label">Saves</div>
-          <div class="nws-total-amt" id="nws-saves-amt">₹0</div>
-          <div class="nws-card-hint">tap to view</div>
-        </div>
-        <div class="nws-total-card untagged">
-          <div class="nws-total-label">Untagged</div>
-          <div class="nws-total-amt" id="nws-untagged-count">0</div>
-        </div>
-      </div>
-
-      <div class="nws-bucket-drawer" id="drawer-needs">
-        <div class="nws-drawer-head">
-          <span class="nws-drawer-title needs">Needs</span>
-          <button class="nws-drawer-close" onclick="App.toggleDrawer('needs')">×</button>
-        </div>
-        <div class="nws-drawer-body" id="drawer-needs-body"></div>
-      </div>
-      <div class="nws-bucket-drawer" id="drawer-wants">
-        <div class="nws-drawer-head">
-          <span class="nws-drawer-title wants">Wants</span>
-          <button class="nws-drawer-close" onclick="App.toggleDrawer('wants')">×</button>
-        </div>
-        <div class="nws-drawer-body" id="drawer-wants-body"></div>
-      </div>
-      <div class="nws-bucket-drawer" id="drawer-saves">
-        <div class="nws-drawer-head">
-          <span class="nws-drawer-title saves">Saves</span>
-          <button class="nws-drawer-close" onclick="App.toggleDrawer('saves')">×</button>
-        </div>
-        <div class="nws-drawer-body" id="drawer-saves-body"></div>
-      </div>
-
-      <div class="nws-summary">
-        <div class="nws-summary-title">Distribution of categorised transactions</div>
-        <div id="nwsBars"></div>
-      </div>
-      <div class="nws-section-label" id="nwsUntaggedLabel">Untagged</div>
-      <div class="nws-tx-list" id="nwsTxList"></div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div class="panel" id="panel-dashboard">
-
-      <div class="dash-section">
-        <div class="dash-section-title">Estate at a glance</div>
-        <div class="stat-grid4" style="margin-bottom:8px">
-          <div class="stat-card"><div class="stat-card-label">Total Income</div><div class="stat-card-val g" id="d-inc">₹0</div></div>
-          <div class="stat-card"><div class="stat-card-label">Total Expenses</div><div class="stat-card-val r" id="d-exp">₹0</div></div>
-          <div class="stat-card"><div class="stat-card-label">Total Assets</div><div class="stat-card-val b" id="d-ass">₹0</div></div>
-          <div class="stat-card"><div class="stat-card-label">Total Liabilities</div><div class="stat-card-val gold" id="d-lia">₹0</div></div>
-        </div>
-        <div class="stat-grid3">
-          <div class="stat-card"><div class="stat-card-label">Net Worth</div><div class="stat-card-val" id="d-nw">₹0</div></div>
-          <div class="stat-card"><div class="stat-card-label">Savings Rate</div><div class="stat-card-val" id="d-sr">—</div></div>
-          <div class="stat-card"><div class="stat-card-label">Total Transactions</div><div class="stat-card-val" id="d-tx">0</div></div>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div class="dash-section-title">Income &amp; Spending</div>
-        <div class="chart-grid">
-          <div class="chart-card">
-            <div class="chart-card-title">4 Pillars</div>
-            <div class="chart-card-sub">Distribution of all financial activity</div>
-            <div class="chart-wrap"><canvas id="cPillars"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-card-title">Income Sources</div>
-            <div class="chart-card-sub">Where your money comes from</div>
-            <div class="chart-wrap"><canvas id="cIncome"></canvas></div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-card-title">Spending by Category</div>
-            <div class="chart-card-sub">Where your money goes (NWS)</div>
-            <div class="chart-wrap"><canvas id="cSpend"></canvas></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div class="dash-section-title">Portfolio &amp; Trends</div>
-        <div class="port-grid">
-          <div class="port-card">
-            <div class="port-title">Monthly Flow</div>
-            <div class="port-sub">Income vs expenses by month</div>
-            <div style="position:relative;height:180px"><canvas id="cMonthly"></canvas></div>
-          </div>
-          <div class="port-card">
-            <div class="port-title">Asset Portfolio</div>
-            <div class="port-sub">What you own</div>
-            <div class="port-list" id="assetList"></div>
-          </div>
-          <div class="port-card">
-            <div class="port-title">Liabilities</div>
-            <div class="port-sub">What you owe</div>
-            <div class="port-list" id="liabList"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div class="dash-section-title">Weekly Snapshot</div>
-        <div class="snap-wrap">
-          <table class="snap-table">
-            <thead><tr><th>Week</th><th>Income</th><th>Expenses</th><th>Assets</th><th>Net</th></tr></thead>
-            <tbody id="weekBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div class="dash-section-title">Monthly Breakdown</div>
-        <div class="snap-wrap">
-          <table class="snap-table">
-            <thead><tr><th>Month</th><th>Income</th><th>Expenses</th><th>Assets</th><th>Liabilities</th></tr></thead>
-            <tbody id="monthBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="dash-section">
-        <div class="dash-section-title">Yearly Summary</div>
-        <div class="snap-wrap">
-          <table class="snap-table">
-            <thead><tr><th>Year</th><th>Income</th><th>Expenses</th><th>Assets</th><th>Liabilities</th></tr></thead>
-            <tbody id="yearBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-</div>
-
-<script src="script.js"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/finance-scott/sw.js', {scope: '/finance-scott/'})
-        .then(reg => console.log('SW registered:', reg.scope))
         .catch(err => console.log('SW failed:', err));
     });
   }
