@@ -3,14 +3,15 @@ import { initializeApp }                        from 'https://www.gstatic.com/fi
 import { getDatabase, ref, set, onValue, get }  from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
 
 // ── Firebase config (edit these with your project values) ─────
-const FIREBASE_CONFIG = {
-  apiKey:            "PASTE_YOUR_API_KEY",
-  authDomain:        "PASTE_YOUR_AUTH_DOMAIN",
-  databaseURL:       "PASTE_YOUR_DATABASE_URL",
-  projectId:         "PASTE_YOUR_PROJECT_ID",
-  storageBucket:     "PASTE_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID",
-  appId:             "PASTE_YOUR_APP_ID"
+const firebaseConfig = {
+  apiKey: "AIzaSyAVoecH0pZvbh7vZd2rVP_nRYSpc3biTzg",
+  authDomain: "finance-scott-dd37d.firebaseapp.com",
+  databaseURL: "https://finance-scott-dd37d-default-rtdb.firebaseio.com",
+  projectId: "finance-scott-dd37d",
+  storageBucket: "finance-scott-dd37d.firebasestorage.app",
+  messagingSenderId: "19984991589",
+  appId: "1:19984991589:web:1e01c778f7278a750f0d8c",
+  measurementId: "G-FN75TMXVRR"
 };
 
 // ── Firebase state ────────────────────────────────────────────
