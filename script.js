@@ -297,31 +297,57 @@ const App = {
       const inp = document.getElementById('chatInput');
       if (!inp) return;
       inp.focus();
+
+      // input event catches mobile virtual keyboard comma
+      inp.addEventListener('input', e => {
+        if (inp.value.includes(',')) {
+          inp.value = inp.value.replace(/,/g, '');
+          this.flowAdvance(inp);
+        }
+      });
+
+      // date picker on mobile — advance when a date is picked
+      if (this.flow.step === 3) {
+        inp.addEventListener('change', () => {
+          if (inp.value) {
+            this.flow.date = inp.value;
+            this.flow.step = 4;
+            this.flowRender();
+          }
+        });
+      }
+
+      // keydown for desktop
       inp.addEventListener('keydown', e => this.flowKey(e));
     }, 10);
   },
 
+  flowAdvance(inp) {
+    const val = inp.value.trim();
+    const f   = this.flow;
+    if (f.step === 0) {
+      if (!val) return;
+      f.desc = val; f.step = 1; this.flowRender();
+    } else if (f.step === 2) {
+      const amt = parseFloat(val);
+      if (!val || isNaN(amt) || amt <= 0) {
+        inp.style.outline = '1px solid var(--red)';
+        setTimeout(() => inp.style.outline = '', 600);
+        return;
+      }
+      f.amount = val; f.step = 3; this.flowRender();
+    } else if (f.step === 3) {
+      if (!inp.value) return;
+      f.date = inp.value; f.step = 4; this.flowRender();
+    }
+  },
+
   flowKey(e) {
     const inp = e.target;
-    const val = inp.value.trim();
     const f   = this.flow;
     if (e.key === ',') {
       e.preventDefault();
-      if (f.step === 0) {
-        if (!val) return;
-        f.desc = val; f.step = 1; this.flowRender();
-      } else if (f.step === 2) {
-        const amt = parseFloat(val);
-        if (!val || isNaN(amt) || amt <= 0) {
-          inp.style.outline = '1px solid var(--red)';
-          setTimeout(() => inp.style.outline = '', 600);
-          return;
-        }
-        f.amount = val; f.step = 3; this.flowRender();
-      } else if (f.step === 3) {
-        if (!inp.value) return;
-        f.date = inp.value; f.step = 4; this.flowRender();
-      }
+      this.flowAdvance(inp);
     } else if (e.key === 'Backspace' && inp.value === '') {
       e.preventDefault(); this.flowBack();
     } else if (e.key === 'Enter' && f.step === 4) {
